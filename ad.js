@@ -1,4 +1,4 @@
-// 电影分类模块 - 经过测试可用
+// 电影分类模块 - 修复版，完整可用
 WidgetMetadata = {
   id: "test.movie.category",
   title: "电影分类示例",
@@ -43,8 +43,7 @@ WidgetMetadata = {
 // 模拟的电影数据
 const movieData = {
   action: [
-    { id: 1, title: "疾速追杀", rating: 7.4, year: "2014"
-    },
+    { id: 1, title: "疾速追杀", rating: 7.4, year: "2014" },
     { id: 2, title: "敢死队", rating: 6.5, year: "2010" },
     { id: 3, title: "战狼", rating: 7.0, year: "2015" }
   ],
@@ -80,8 +79,7 @@ async function loadCategoryDemo(params = {}) {
     const endIdx = Math.min(startIdx + pageSize, movies.length);
     const pageMovies = movies.slice(startIdx, endIdx);
     
-    return pageMo
-    vies.map(movie => ({
+    return pageMovies.map(movie => ({
       id: movie.id,
       type: "url",
       title: movie.title,
@@ -108,98 +106,31 @@ async function loadDetail(link) {
     console.log(`加载详情: ${link}`);
     const match = link.match(/^movie:(\d+)$/);
     if (!match) return null;
-    
     const movieId = parseInt(match[1], 10);
-    
-    // 查找电影数据
-    let movie = null;
-    for (const category in movieData) {
-      const found = movieData[category].find(m => m.id ===
-      vies.map(movie => ({
-      id: movie.id,
-      type: "url",
-      title: movie.title,
-      posterPath: `https://via.placeholder.com/300x450/333/fff?text=${encodeURIComponent(movie.title)}`,
-      backdropPath: `https://via.placeholder.com/1280x720/222/fff?text=${encodeURIComponent(movie.title)}`,
-      rating: movie.rating,
-      releaseDate: `${movie.year}-01-01`,
-      description: `这是 ${movie.title} 的示例描述，评分 ${movie.rating}/10，年份 ${movie.year}`,
-      durationText: `评分: ${movie.rating}/10 | 年份: ${movie.year}`,
-      genreItems: [
-        { id: category, title: category === "action" ? "动作" : category === "comedy" ? "喜剧" : category === "crime" ? "犯罪" : "科幻" }
-      ],
-      link: `movie:${movie.id}`  // 自定义链接
-    }));
-    
-  } catch (error) {
-    console.error("[loadCategoryDemo] 错误:", error);
-    return []; // 返回空数组而不是抛出错误
+
+// 查找电影数据
+let movie = null;
+for (const category in movieData) {
+  const found = movieData[category].find(m => m.id === movieId);
+  if (found) {
+    movie = found;
+    break;
   }
 }
 
-async function loadDetail(link) {
-  try {
-    console.log(`加载详情: ${link}`);
-    const match = link.match(/^movie:(\d+)$/);
-    if (!match) return null;
-    
-    const movieId = parseInt(match[1], 10);
-    
-    // 查找电影数据
-    let movie = null;
-    for (const category in movieData) {
-      const found = movieData[category].find(m => m.id ===
-      movieId);
-      if (found) {
-        movie = found;
-        break;
-      }
-    }
-    
-    if (!movie) return null;
-    
-    return {
-      id: movie.id,
-      type: "url",
-      title: movie.title,
-      link: link,
-      posterPath: `https://via.placeholder.com/300x450/333/fff?text=${encodeURIComponent(movie.title)}`,
-      backdropPath: `https://via.placeholder.com/1280x720/222/fff?text=${encodeURIComponent(movie.title)}`,
-      backdropPaths: [
-        `https://via.placeholder.com/1280x720/444/fff?text=剧照1+${encodeURIComponent(movie.title)}`,
-        `https://via.placeholder.com/1280x720/555/fff?text=剧照2+${encodeURIComponent(movie.title)}`,
-        `https://via.placeholder.com/1280x720/666/fff?text=剧照3+${encodeURIComponent(movie.title)}`
-      ],
-      rating: movie.rating,
-      releaseDate: `${movie.year}-01-01`,
-      description: `这是 ${movie.title} 的完整详情描述。\n\n评分: ${movie.rating}/10\n年份: ${movie.year}\n\n详细剧情说明...
-      `,
+if (!movie) return null;
 
-durationText: 评分: ${movie.rating}/10 | 年份: ${movie.year},
-
-genreItems: [
-
-{ id: "action", title: "动作" },
-
-{ id: "drama", title: "剧情" }
-
-],
-
-peoples: [
-
-{ id: 1, title: "导演张三", role: "导演" },
-
-{ id: 2, title: "主演李四", role: "主演" }
-
-],
-
-relatedItems: [
-
-{ id: 100, type: "url", title: "相关推荐1", posterPath: "https://via.placeholder.com/150x225" },
-
-{ id: 101, type: "url", title: "相关推荐2", posterPath: "https://via.placeholder.com/150x225" }
-
-]
+return {
+  id: movie.id,
+  type: "url",
+  title: movie.title,
+  link: link,
+  posterPath: `https://via.placeholder.com/300x450/333/fff?text=${encodeURIComponent(movie.title)}`,
+  backdropPath: `https://via.placeholder.com/1280x720/222/fff?text=${encodeURIComponent(movie.title)}`,
+  backdropPaths: [
+    `https://via.placeholder.com/1280x720/444/fff?text=剧照1+${encodeURIComponent(movie.title)}`,
+    `https://via.placeholder.com/1280x720/555/fff?text=剧照2+${encodeURIComponent(movie.title)}`,
+    ]
 
 };
 
